@@ -37,15 +37,15 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String insertUser(@ModelAttribute("") UserDTO userDTO, Model model){
+    public String insertUser(@ModelAttribute("user") UserDTO userDTO, Model model){
         model.addAttribute("user", new UserDTO());
         model.addAttribute("roles", roleService.FindAll());
 
-        model.addAttribute(userDTO);
+        userService.save(userDTO);
 
         model.addAttribute("employees", userService.FindAll());
 
-        return "redirect:user/create";
+        return "user/create";
     }
 
 }
