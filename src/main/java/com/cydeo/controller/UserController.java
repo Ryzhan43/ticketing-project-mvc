@@ -3,12 +3,15 @@ package com.cydeo.controller;
 import com.cydeo.bootstrap.DataGenerator;
 import com.cydeo.dto.RoleDTO;
 import com.cydeo.dto.UserDTO;
+import com.cydeo.entity.User;
 import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.rmi.MarshalledObject;
 
 @Controller
 @RequestMapping("/user")
@@ -45,15 +48,19 @@ public class UserController {
     public String editUser(@PathVariable("username") String username, Model model){
 
 
+        System.out.println("here");
         model.addAttribute("roles", roleService.FindAll());
         model.addAttribute("employees", userService.FindAll());
         model.addAttribute("user", userService.findById(username));
 
         return "/user/update";
     }
-//
-//    @PostMapping()
-//    public String saveUpdatedUser(){
-//        return "";
-//    }
+
+    @PostMapping("/update")
+    public String saveUpdatedUser(@ModelAttribute("user")UserDTO user){
+        userService.deleteById(user.getUserName());
+        userService.save(user);
+
+        return "redirect:/user/create";
+    }
 }
