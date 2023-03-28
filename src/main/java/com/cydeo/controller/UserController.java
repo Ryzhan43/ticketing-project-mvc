@@ -33,7 +33,6 @@ public class UserController {
         model.addAttribute("employees", userService.FindAll());
 
         return "user/create";
-
     }
 
     @PostMapping("/create")
@@ -47,8 +46,6 @@ public class UserController {
     @GetMapping("/update/{username}")
     public String editUser(@PathVariable("username") String username, Model model){
 
-
-        System.out.println("here");
         model.addAttribute("roles", roleService.FindAll());
         model.addAttribute("employees", userService.FindAll());
         model.addAttribute("user", userService.findById(username));
@@ -56,10 +53,10 @@ public class UserController {
         return "/user/update";
     }
 
-    @PostMapping("/update")
-    public String saveUpdatedUser(@ModelAttribute("user")UserDTO user){
-        userService.deleteById(user.getUserName());
-        userService.save(user);
+    @PostMapping("/update/{username}")
+    public String saveUpdatedUser(@PathVariable("username") String username, @ModelAttribute("user")UserDTO user){
+
+        userService.update(username, user);
 
         return "redirect:/user/create";
     }
