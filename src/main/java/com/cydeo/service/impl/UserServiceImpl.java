@@ -1,10 +1,13 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.RoleDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserServiceImpl extends AbstractMapService<UserDTO, String> implements UserService {
     @Override
@@ -28,6 +31,14 @@ public class UserServiceImpl extends AbstractMapService<UserDTO, String> impleme
     @Override
     public UserDTO findById(String email) {
         return super.findById(email);
+    }
+
+    public List<UserDTO> findByPosition(String role)
+    {
+        return super.findAll()
+                .stream()
+                .filter(a->a.getRoleDTO().getDescription().equalsIgnoreCase(role))
+                .collect(Collectors.toList());
     }
 
 }

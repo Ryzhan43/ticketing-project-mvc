@@ -1,16 +1,14 @@
 package com.cydeo.controller;
 
 import com.cydeo.dto.ProjectDTO;
+import com.cydeo.dto.UserDTO;
 import com.cydeo.enums.Status;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -32,10 +30,7 @@ public class ProjectController {
 
         model.addAttribute("project", new ProjectDTO());
         model.addAttribute("projects", projectService.FindAll());
-        model.addAttribute("managers", userService.FindAll()
-                .stream()
-                .filter(a->a.getRoleDTO().getDescription().equalsIgnoreCase("Manager"))
-                .collect(Collectors.toUnmodifiableList()));
+        model.addAttribute("managers", userService.findByPosition("manager"));
 
         return "project/create";
     }
@@ -45,6 +40,37 @@ public class ProjectController {
 
         projectService.save(projectDTO);
 
+        return "redirect:/project/create";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProject(@PathVariable("id") String id){
+        projectService.deleteById(id);
+
+        return "redirect:/project/create";
+    }
+    @GetMapping("/complete/{id}")
+    public String completeProject(@PathVariable("id") String id){
+
+        projectService.complete(projectService.findById(id));
+
+        return "redirect:/project/create";
+    }
+
+    @GetMapping("/update/{projectCode}")
+    public String updateProject(@PathVariable("projectCode") String projectCode, Model model){
+
+        model.addAttribute("project", projectService.findById(projectCode));
+        model.addAttribute("projects", projectService.FindAll());
+        model.addAttribute("managers", userService.findByPosition("manager"));
+
+        return "/project/update";
+    }
+
+    @PostMapping("/update/{projectCode}")
+    public String saveUpdatedProject(@PathVariable("projectCode") String projectCode, @ModelAttribute("project") ProjectDTO projectDTO){
+
+        projectService.update(projectCode,projectDTO);
         return "redirect:/project/create";
     }
 }

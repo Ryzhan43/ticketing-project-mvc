@@ -10,7 +10,7 @@ import java.util.List;
 public class ProjectServiceImp extends AbstractMapService<ProjectDTO,String> implements ProjectService {
     @Override
     public ProjectDTO save(ProjectDTO projectDTO) {
-        if(projectDTO.getProjectStatus()!=null)
+        if(projectDTO.getProjectStatus()==null)
         {
             projectDTO.setProjectStatus(Status.OPEN);
         }
@@ -24,8 +24,15 @@ public class ProjectServiceImp extends AbstractMapService<ProjectDTO,String> imp
     }
 
     @Override
-    public void update(String id, ProjectDTO t) {
-        super.update(id,t);
+    public void update(String id, ProjectDTO projectDTO) {
+
+        if(projectDTO.getProjectStatus()==null)
+        {
+            projectDTO.setProjectStatus(Status.OPEN);
+        }
+
+
+        super.update(id,projectDTO);
     }
 
     @Override
@@ -36,5 +43,11 @@ public class ProjectServiceImp extends AbstractMapService<ProjectDTO,String> imp
     @Override
     public ProjectDTO findById(String id) {
         return super.findById(id);
+    }
+
+    @Override
+    public void complete(ProjectDTO projectDTO) {
+        projectDTO.setProjectStatus(Status.COMPLETE);
+        super.save(projectDTO.getProjectCode(),projectDTO);
     }
 }
