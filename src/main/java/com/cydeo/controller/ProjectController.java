@@ -43,7 +43,6 @@ public class ProjectController {
     @PostMapping("/create")
     public String saveProject(@ModelAttribute("project") ProjectDTO projectDTO){
 
-        projectDTO.setProjectStatus(Status.IN_PROGRESS);
         projectService.save(projectDTO);
 
         return "redirect:/project/create";
