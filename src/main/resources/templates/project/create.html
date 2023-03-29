@@ -53,7 +53,7 @@
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label>Assigned Manager</label>
-                                                    <select name="assignedmanager" class="custom-select">
+                                                    <select name="assignedmanager" th:field="*{assignedManager}" class="custom-select">
                                                         <option th:each="manager : ${managers}" th:value="${manager.getUserName()}" th:text="${manager.getFirstName()} + ' ' + ${manager.getLastName()} + ' ' + ${manager.getRoleDTO().getDescription()}"></option>
                                                     </select>
                                                 </div>
@@ -126,13 +126,13 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
+                                            <tr th:each="project : ${projects}">
+                                                <td th:text="${project.projectCode}"></td>
+                                                <td th:text="${project.projectName}"></td>
+                                                <td th:text="${project.startDate}"></td>
+                                                <td th:text="${project.endDate}"></td>
+                                                <td th:text="${project.getAssignedManager().getFirstName()} + ' ' +${project.getAssignedManager().getLastName()}"></td>
+                                                <td th:text="${project.projectStatus.getValue()}">
                                                     <a href="#"><button type="button" class="btn btn-warning rounded-0">Update</button></a>
                                                     <a href="#"><button type="button" class="btn btn-danger rounded-0">Delete</button></a>
                                                     <a href="#"><button type="button" class="btn btn-info rounded-0">Complete</button></a>

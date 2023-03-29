@@ -1,12 +1,15 @@
 package com.cydeo.controller;
 
 import com.cydeo.dto.ProjectDTO;
+import com.cydeo.enums.Status;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.stream.Collectors;
@@ -29,8 +32,20 @@ public class ProjectController {
 
         model.addAttribute("project", new ProjectDTO());
         model.addAttribute("projects", projectService.FindAll());
-        model.addAttribute("managers", userService.FindAll().stream().filter(a->a.getRoleDTO().getDescription().equalsIgnoreCase("Manager")).collect(Collectors.toUnmodifiableList()));
+        model.addAttribute("managers", userService.FindAll()
+                .stream()
+                .filter(a->a.getRoleDTO().getDescription().equalsIgnoreCase("Manager"))
+                .collect(Collectors.toUnmodifiableList()));
 
         return "project/create";
+    }
+
+    @PostMapping("/create")
+    public String saveProject(@ModelAttribute("project") ProjectDTO projectDTO){
+
+        projectDTO.setProjectStatus(Status.IN_PROGRESS);
+        projectService.save(projectDTO);
+
+        return "redirect:/project/create";
     }
 }
