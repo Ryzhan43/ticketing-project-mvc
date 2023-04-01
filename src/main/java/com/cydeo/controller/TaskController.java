@@ -42,6 +42,6 @@ public class TaskController {
 
         taskService.save(taskDTO);
 
-        return "redirect:task/create";
+        return "redirect:/task/create";
     }
 }
