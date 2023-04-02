@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/task")
 @Controller
@@ -39,9 +36,15 @@ public class TaskController {
 
     @PostMapping("/create")
     public String saveTask(@ModelAttribute("task") TaskDTO taskDTO){
-
         taskService.save(taskDTO);
 
         return "redirect:/task/create";
     }
+
+    @GetMapping("/delete/{taskId}")
+    public String deleteTask(@PathVariable("taskId") Long id){
+        taskService.deleteById(id);
+        return "redirect:/task/create";
+    }
+
 }
