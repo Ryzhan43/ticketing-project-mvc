@@ -42,8 +42,8 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td></td>
+                                            <tr th:each="project:${projects}">
+                                                <td th:text="${}"></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
