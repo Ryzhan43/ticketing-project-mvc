@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequestMapping("/task")
 @Controller
 @Service
@@ -47,4 +49,19 @@ public class TaskController {
         return "redirect:/task/create";
     }
 
+
+    @GetMapping("/update/{id}")
+    public String editTask(@PathVariable("id")Long id, Model model){
+        model.addAttribute("task", taskService.findById(id));
+        model.addAttribute("tasks", taskService.FindAll());
+        model.addAttribute("projects", projectService.FindAll());
+        model.addAttribute("employees", userService.FindAll());
+        return "task/update";
+    }
+
+    @PostMapping("/update/{taskId}")
+    public String updateTask(@PathVariable("taskId")Long id, @ModelAttribute("task")TaskDTO taskDTO){
+        taskService.update(id,taskDTO);
+        return "redirect:/task/create";
+    }
 }
